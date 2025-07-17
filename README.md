@@ -22,7 +22,7 @@ git clone https://github.com/MatteoBuffo/autocomplete-assignment.git
 ### Navigate to the project directory
 
 ```bash
-cd your-repo-name
+cd autocomplete-assignment
 ```
 
 ### Install dependencies
