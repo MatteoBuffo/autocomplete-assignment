@@ -16,7 +16,7 @@ Make sure you have the following installed on your machine:
 ### Clone the repository
 
 ```bash
-git clone https://github.com/MatteoBuffo/autocomplete-assignment.git`
+git clone https://github.com/MatteoBuffo/autocomplete-assignment.git
 ```
 
 ### Navigate to the project directory
