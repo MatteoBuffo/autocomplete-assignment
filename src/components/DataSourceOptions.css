@@ -1,0 +1,25 @@
+.data-options-container,
+.data-options-fieldset,
+.data-options-legend {
+    color: #fff;
+}
+
+.data-options-container,
+.data-options-fieldset {
+    margin-bottom: 16px;
+}
+
+.data-options-fieldset {
+    border: none;
+}
+
+.data-options-legend {
+    text-align: center;
+}
+
+.data-options-radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 8px;
+}

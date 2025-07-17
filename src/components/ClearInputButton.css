@@ -1,0 +1,16 @@
+.autocomplete-clear-btn {
+    position: absolute;
+    top: 0;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 8px
+}
+
+.autocomplete-clear-btn:hover {
+    color: #333;
+}

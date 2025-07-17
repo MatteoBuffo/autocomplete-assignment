@@ -1,26 +1,69 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
+import AutoComplete from './components/AutoComplete';
+import DataSourceOptions from "./components/DataSourceOptions";
+import {DataSource} from "./types/dataSource";
+import {fetchRemoteUsers} from "./services/remote";
+import {fetchLocalUsers} from "./services/local";
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const [dataSource, setDataSource] = useState<DataSource>(DataSource.REMOTE);
+
+  const handleDataSourceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDataSource(e.target.value as DataSource);
+  };
+
+  const fetchData = async (searchTerm: string) => {
+    return dataSource === DataSource.LOCAL
+        ? fetchLocalUsers(searchTerm)
+        : fetchRemoteUsers(searchTerm);
+  };
+
+  useEffect(() => {
+    const setVh = () => {
+      // Sets CSS variable --vh to 1% of the viewport height (useful for mobile layouts)
+      const vh = window.innerHeight;
+      document.documentElement.style.setProperty('--vh', `${vh * 0.01}px`);
+    };
+
+    setVh();
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', setVh);
+
+    return () => {
+      window.removeEventListener('resize', setVh);
+      window.removeEventListener('orientationchange', setVh);
+    };
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div
+          role="main"
+          className="app-container"
+      >
+
+        {/* 1. (optional) App title */}
+        <h1
+            id="title"
+            className="app-title"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          My Auto-complete Component
+        </h1>
+
+        {/* 2. (optional) Select data source */}
+        <DataSourceOptions
+            dataSource={dataSource}
+            handleDataSourceChange={handleDataSourceChange}
+        />
+
+        {/*/!* 3. Auto-complete *!/*/}
+        <AutoComplete
+            fetchData={fetchData}
+            placeholder="Search users..."
+        />
+
+      </div>
   );
-}
+};
 
 export default App;

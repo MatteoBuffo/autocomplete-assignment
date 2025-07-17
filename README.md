@@ -1,46 +1,140 @@
-# Getting Started with Create React App
+# Frontend Technical Assessment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+_Author: Matteo Buffo_
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+Follow these steps to clone the repository and install the dependencies.
 
-### `npm start`
+### Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Make sure you have the following installed on your machine:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- [Node.js](https://nodejs.org/) (version 14 or higher recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
 
-### `npm test`
+### Clone the repository
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/your-username/your-repo-name.git`
+```
 
-### `npm run build`
+### Navigate to the project directory
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd your-repo-name
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Install dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm install
+```
 
-### `npm run eject`
+## Run
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This project runs as a standard React app.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Personal considerations
 
-## Learn More
+### Auto-complete component development
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The final app consists of three top-level pieces (in `App.tsx`):
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. the page title;
+2. a pair of radio buttons that lets the user choose between the local and remote data source;
+
+   | Data Source | Data                                  | Type of returned Users |
+                        |-------------|---------------------------------------|------------------------|
+   | Local | Array of users from `data/users.json` | `LocalUser`            |
+   | Remote | Array of GitHub users                | `RemoteUser`           |
+
+3. the required auto-complete component.
+
+The first two parts are totally optional and can be commented out if needed. When using remote data,
+fetched `RemoteUser`s are mapped to `LocalUser`s to conform to the auto-complete logic.
+
+The initial design and development of the auto-complete component steps were quite
+straightforward. As the component complexity grew, I refactored it in smaller parts to maintain the
+code clean, organized and maintainable.
+
+In addition to the required features, I implemented the following enhancements.
+
++ **Loading and error**\
+  Acknowledging that requests may be delayed or fail, whether intentionally or not, `loading` and `error` states are
+  there to manage and display
+  the request status effectively. Additionally, the `error` state can be simulated by typing `"err"` in
+  the
+  auto-complete input field.
++ **Retry logic**\
+  If a request fails, the user can retry it by pressing the Retry button shown with the error message. This allows the
+  user to trigger a new request without changing the search term.
++ **Debouncing**\
+  The request (be it local or remote) is not sent at every input change, but is instead delayed until the user has
+  stopped typing for a specified period (by default, 500 ms). This significantly improves performance by reducing the
+  number of
+  unnecessary requests.
++ **URL encoding**\
+  The remote request URL is safely constructed using `encodeURIComponent` to ensure that special characters in the
+  search
+  term are correctly encoded. This prevents malformed URLs and avoids errors or unintended
+  behaviors when making requests.
++ **Smart results sorting**\
+  The query results are sorted so that entries beginning with the search term appear before those that only contain the
+  term. This approach helps users find the desired entry more quickly.\
+  For example, suppose we are searching for the user named **Laura**, and we start typing `"la"` in the autocomplete
+  input. Compare the sorting strategies below, focusing on where **Laura** appears in the list.
+
+  | Sorting strategy |                                                            Results                                                            | Laura's position |
+                                                                                      |------------------|:-----------------------------------------------------------------------------------------------------------------------------:|:----------------:|
+  | None             |              <img alt="Results of no sorting." src="readme\images\sort_none.png" title="sort-none" width="75%"/>              |       6th        |
+  | Alphabetical     | <img alt="Results of alphabetical sorting." src="readme\images\sort_alphabetical.png" title="sort_alphabetical" width="75%"/> |       7th        |
+  | Smart            |           <img alt="Results of smart sorting." src="readme\images\sort_smart.png" title="sort-smart" width="75%"/>            |       1st        |
+
+### Edge use-cases and UX
+
+Since several edge use-cases emerged while stress-testing the app, this section took a significant portion of the time I
+spent on the assignment. Below is a list of design choices I
+made to achieve a smooth and user-friendly experience.
+
++ **Request cancellation**\
+  In-flight requests are canceled if the search term changes while a response is still pending. This prevents outdated
+  results from being displayed and avoids potential race conditions.
+
++ **Accessibility**
+    + The web page is fully navigable using only the keyboard, ensuring accessibility for users who
+      cannot or prefer not to use a mouse. In particular:
+        + the `Up` and `Down` arrow keys navigate the query result entries in a
+          circular way (that is, the last/first entry gets highlighted when the user reaches the top/bottom of the
+          list);
+        + the `Enter`/`Return` key submits the currently focused result entry, unless the search term already matches it
+          exactly;
+        + the `Esc` key closes the results dropdown.
+
+    + ARIA roles and attributes are there to improve accessibility.
+    + Only the first `limit` request results are shown (by default, `limit`=8) and not all. In this way, all the entries
+      are fully
+      visible within the dropdown, eliminating the need for
+      inline scrolling.
+    + The results dropdown style does not cause a shift in the elements following
+      the autocomplete component. Instead, those elements are hidden by the dropdown.
+
++ **Mobile browsers**\
+  I stress-tested the web app not only by manually resizing the browser window on desktop, but also by testing it
+  directly on my phone. During this testing phase, I made several adjustments to improve the mobile UX, both in portrait
+  and
+  landscape orientations.
+    + Depending on the phone operating system, the virtual keyboard shows a dedicated UI element (e.g. a magnifying
+      glass
+      or Search/Go button) instead of the default Enter/Return key.
+    + When the user presses the search button, the virtual keyboard is dismissed. Although the input field loses focus,
+      the auto-complete results remain visible. The results are hidden only when the user clicks outside the input field
+      or the results dropdown.
+    + Again, the natural height of the results list is a choice that makes the component manageable and pleasant also on
+      mobile screen sizes.

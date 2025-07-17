@@ -1,0 +1,7 @@
+.autocomplete-icon {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    color: #888;
+    pointer-events: none;
+}

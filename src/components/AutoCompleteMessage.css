@@ -1,0 +1,13 @@
+.autocomplete-message {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    right: 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #888;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    z-index: 1;
+}
