@@ -51,9 +51,9 @@ The final app consists of three top-level pieces (in `App.tsx`):
 2. a pair of radio buttons that lets the user choose between the local and remote data source;
 
    | Data Source | Data                                  | Type of returned Users |
-                        |-------------|---------------------------------------|------------------------|
-   | Local | Array of users from `data/users.json` | `LocalUser`            |
-   | Remote | Array of GitHub users                | `RemoteUser`           |
+   |-------------|---------------------------------------|------------------------|
+   | Local       | Array of users from `data/users.json` | `LocalUser`            |
+   | Remote      | Array of GitHub users                 | `RemoteUser`           |
 
 3. the required auto-complete component.
 
@@ -92,10 +92,10 @@ In addition to the required features, I implemented the following enhancements.
   input. Compare the sorting strategies below, focusing on where **Laura** appears in the list.
 
   | Sorting strategy |                                                            Results                                                            | Laura's position |
-                                                                                      |------------------|:-----------------------------------------------------------------------------------------------------------------------------:|:----------------:|
-  | None             |              <img alt="Results of no sorting." src="readme\images\sort_none.png" title="sort-none" width="75%"/>              |       6th        |
+  |------------------|:-----------------------------------------------------------------------------------------------------------------------------:|:----------------:|
+  | None             | <img alt="Results of no sorting." src="readme\images\sort_none.png" title="sort-none" width="75%"/>                           |       6th        |
   | Alphabetical     | <img alt="Results of alphabetical sorting." src="readme\images\sort_alphabetical.png" title="sort_alphabetical" width="75%"/> |       7th        |
-  | Smart            |           <img alt="Results of smart sorting." src="readme\images\sort_smart.png" title="sort-smart" width="75%"/>            |       1st        |
+  | Smart            | <img alt="Results of smart sorting." src="readme\images\sort_smart.png" title="sort-smart" width="75%"/>                      |       1st        |
 
 ### Edge use-cases and UX
 
